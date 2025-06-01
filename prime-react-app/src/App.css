@@ -1,6 +1,6 @@
-/* =================== */
-/* 1. Global Layout Styles */
-/* =================== */
+/* ============================= */
+/* 1. Global Layout Styles       */
+/* ============================= */
 
 /* Main container: centers the entire app content */
 .app-container {
@@ -21,9 +21,9 @@
   padding: 0.5rem;
 }
 
-/* =================== */
-/* 2. Title and Buttons */
-/* =================== */
+/* ============================= */
+/* 2. Title and Buttons          */
+/* ============================= */
 
 /* Centered page title */
 .app-title {
@@ -59,9 +59,9 @@
   border-radius: 0.25rem;
 }
 
-/* =================== */
-/* 3. DataTable Styling */
-/* =================== */
+/* ============================= */
+/* 3. DataTable Styling          */
+/* ============================= */
 
 /* Base styling for PrimeReact DataTable */
 .custom-datatable {
@@ -103,28 +103,62 @@
   display: none !important;
 }
 
-/* =================== */
-/* 4. Dialog and Card Styling */
-/* =================== */
+/* Center DataTable header text (global, in case custom-datatable is not used) */
+.p-datatable .p-datatable-thead > tr > th {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+/* ============================= */
+/* 4. Dialog and Card Styling    */
+/* ============================= */
 
 /* Style for employee view dialog */
 .employee-dialog {
   width: 70vw;
+  max-width: 900px;
 }
 
 /* Center text inside employee details cards */
 .employee-dialog .p-card-content p {
-  text-align: center;
-}
-
-/* Optional spacing between card fields */
-.employee-dialog .p-card-content p {
+  text-align: left;
   margin: 0.5rem 0;
 }
 
-/* =================== */
-/* 5. Additional UI Elements */
-/* =================== */
+/* Style for cards in the view dialog */
+.employee-dialog .p-card {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: #fff;
+}
+
+.employee-dialog .p-card-title {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* Style for the grid items */
+.employee-dialog .grid-nogutter .p-2 {
+  padding: 0.5rem;
+}
+
+.employee-dialog .flex-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.employee-dialog .font-bold {
+  font-weight: 600;
+}
+
+/* ============================= */
+/* 5. Additional UI Elements     */
+/* ============================= */
 
 /* Change log at the bottom of the table */
 .change-log {
@@ -138,9 +172,45 @@
   background-color: #ffffff;
 }
 
-/* =================== */
-/* 6. Responsive Design */
-/* =================== */
+/* Add buttons */
+.justify-end {
+  justify-content: flex-end;
+}
+
+/* Add/Edit Employee Dialog */
+.employee-form-dialog .p-dialog-title {
+  width: 100%;
+  text-align: center;
+}
+
+/* Darker on click */
+.p-button:active,
+.p-button:focus:active {
+  filter: brightness(0.75); /* much darker */
+}
+
+/* Brighter on click */
+.p-button:active,
+.p-button:focus:active {
+  filter: brightness(1.2); /* brighter */
+}
+
+/* Responsive Employee Form Dialog */
+.employee-form-dialog .p-dialog-content {
+  padding: 1rem;
+}
+
+
+
+
+
+
+
+
+
+/* ============================= */
+/* 6. Responsive Design          */
+/* ============================= */
 
 @media (max-width: 1400px) {
   .table-wrapper {
@@ -148,8 +218,6 @@
   }
   .custom-datatable {
     font-size: 0.9rem;
-  }
-  .custom-datatable {
     overflow-x: auto;
   }
   .custom-datatable .p-datatable-thead > tr > th,
@@ -157,14 +225,13 @@
     min-width: 80px;
   }
 }
+
 @media (max-width: 1200px) {
   .table-wrapper {
     max-width: 100%;
   }
   .custom-datatable {
     font-size: 0.9rem;
-  }
-  .custom-datatable {
     overflow-x: auto;
   }
   .custom-datatable .p-datatable-thead > tr > th,
@@ -172,14 +239,13 @@
     min-width: 70px;
   }
 }
+
 @media (max-width: 1024px) {
   .table-wrapper {
     max-width: 100%;
   }
   .custom-datatable {
     font-size: 0.9rem;
-  }
-  .custom-datatable {
     overflow-x: auto;
   }
   .custom-datatable .p-datatable-thead > tr > th,
@@ -191,47 +257,31 @@
 @media (max-width: 960px) {
   .employee-dialog {
     width: 75vw;
+    max-width: 700px;
   }
-  .button-group {
-    flex-wrap: wrap;
-    justify-content: center;
+  .employee-dialog .grid-nogutter .col-12 {
+    flex: 0 0 100%;
   }
-  .search-input {
-    max-width: 20rem;
+  .employee-dialog .grid-nogutter .md\:col-6 {
+    flex: 0 0 50%;
   }
-  .custom-datatable .p-datatable-thead > tr > th,
-  .custom-datatable .p-datatable-tbody > tr > td {
-    min-width: 60px;
-    font-size: 0.85rem;
+  .employee-dialog .grid-nogutter .lg\:col-4 {
+    flex: 0 0 100%;
   }
 }
 
 @media (max-width: 640px) {
   .employee-dialog {
     width: 90vw;
+    max-width: 500px;
   }
-  .app-title {
-    font-size: 1.2rem;
-  }
-  .button-group {
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-  .search-input {
-    max-width: 15rem;
-  }
-  .custom-datatable {
-    font-size: 0.8rem;
-  }
-  .change-log {
-    font-size: 0.9rem;
-  }
-  .custom-datatable .p-datatable-thead > tr > th,
-  .custom-datatable .p-datatable-tbody > tr > td {
-    min-width: 50px;
-    font-size: 0.75rem;
+  .employee-dialog .grid-nogutter .col-12,
+  .employee-dialog .grid-nogutter .md\:col-6,
+  .employee-dialog .grid-nogutter .lg\:col-4 {
+    flex: 0 0 100%;
   }
 }
+
 @media (max-width: 480px) {
   .app-title {
     font-size: 1rem;
@@ -248,40 +298,6 @@
     min-width: 40px;
     font-size: 0.7rem;
   }
-}
-
-/* view card title */
-.employee-dialog .p-dialog-title {
-  width: 100%;
-  text-align: center;
-}
-
-/* view card title header */
-.p-card-title {
-  text-align: center;
-  width: 100%;
-}
-
-/* add buttons */
-.justify-end {
-  justify-content: flex-end;
-}
-
-/* add edit employee  */
-.employee-form-dialog .p-dialog-title {
-  width: 100%;
-  text-align: center;
-}
-
-/* Darken PrimeReact buttons on click (active state) */
-.p-button:active,
-.p-button:focus:active {
-  filter: brightness(0.85);
-}
-
-/* Responsive Employee Form Dialog */
-.employee-form-dialog .p-dialog-content {
-  padding: 1rem;
 }
 
 @media (max-width: 600px) {
