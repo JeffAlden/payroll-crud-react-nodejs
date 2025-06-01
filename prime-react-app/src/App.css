@@ -1,7 +1,6 @@
-<<<<<<< HEAD
-/* ============================= */
-/* 1. Global Layout Styles       */
-/* ============================= */
+/* =================== */
+/* 1. Global Layout Styles */
+/* =================== */
 
 /* Main container: centers the entire app content */
 .app-container {
@@ -22,9 +21,9 @@
   padding: 0.5rem;
 }
 
-/* ============================= */
-/* 2. Title and Buttons          */
-/* ============================= */
+/* =================== */
+/* 2. Title and Buttons */
+/* =================== */
 
 /* Centered page title */
 .app-title {
@@ -60,9 +59,9 @@
   border-radius: 0.25rem;
 }
 
-/* ============================= */
-/* 3. DataTable Styling          */
-/* ============================= */
+/* =================== */
+/* 3. DataTable Styling */
+/* =================== */
 
 /* Base styling for PrimeReact DataTable */
 .custom-datatable {
@@ -104,73 +103,17 @@
   display: none !important;
 }
 
-<<<<<<< HEAD
-/* Center DataTable header text (global, in case custom-datatable is not used) */
-.p-datatable .p-datatable-thead > tr > th {
-  text-align: center !important;
-  vertical-align: middle !important;
-}
-
-/* ============================= */
-/* 4. Dialog and Card Styling    */
-/* ============================= */
-=======
 /* =================== */
 /* 4. Dialog and Card Styling */
 /* =================== */
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
 
 /* Style for employee view dialog */
 .employee-dialog {
   width: 70vw;
-<<<<<<< HEAD
-  max-width: 900px;
-=======
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
 }
 
 /* Center text inside employee details cards */
 .employee-dialog .p-card-content p {
-<<<<<<< HEAD
-  text-align: left;
-  margin: 0.5rem 0;
-}
-
-/* Style for cards in the view dialog */
-.employee-dialog .p-card {
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  margin-bottom: 1rem;
-  padding: 1rem;
-  background-color: #fff;
-}
-
-.employee-dialog .p-card-title {
-  text-align: center;
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
-
-/* Style for the grid items */
-.employee-dialog .grid-nogutter .p-2 {
-  padding: 0.5rem;
-}
-
-.employee-dialog .flex-col {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.employee-dialog .font-bold {
-  font-weight: 600;
-}
-
-/* ============================= */
-/* 5. Additional UI Elements     */
-/* ============================= */
-=======
   text-align: center;
 }
 
@@ -182,7 +125,6 @@
 /* =================== */
 /* 5. Additional UI Elements */
 /* =================== */
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
 
 /* Change log at the bottom of the table */
 .change-log {
@@ -196,45 +138,9 @@
   background-color: #ffffff;
 }
 
-/* Add buttons */
-.justify-end {
-  justify-content: flex-end;
-}
-
-/* Add/Edit Employee Dialog */
-.employee-form-dialog .p-dialog-title {
-  width: 100%;
-  text-align: center;
-}
-
-/* Darker on click */
-.p-button:active,
-.p-button:focus:active {
-  filter: brightness(0.75); /* much darker */
-}
-
-/* Brighter on click */
-.p-button:active,
-.p-button:focus:active {
-  filter: brightness(1.2); /* brighter */
-}
-
-/* Responsive Employee Form Dialog */
-.employee-form-dialog .p-dialog-content {
-  padding: 1rem;
-}
-
-
-
-
-
-
-
-
-
-/* ============================= */
-/* 6. Responsive Design          */
-/* ============================= */
+/* =================== */
+/* 6. Responsive Design */
+/* =================== */
 
 @media (max-width: 1400px) {
   .table-wrapper {
@@ -242,11 +148,8 @@
   }
   .custom-datatable {
     font-size: 0.9rem;
-<<<<<<< HEAD
-=======
   }
   .custom-datatable {
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
     overflow-x: auto;
   }
   .custom-datatable .p-datatable-thead > tr > th,
@@ -254,21 +157,14 @@
     min-width: 80px;
   }
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
 @media (max-width: 1200px) {
   .table-wrapper {
     max-width: 100%;
   }
   .custom-datatable {
     font-size: 0.9rem;
-<<<<<<< HEAD
-=======
   }
   .custom-datatable {
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
     overflow-x: auto;
   }
   .custom-datatable .p-datatable-thead > tr > th,
@@ -276,21 +172,14 @@
     min-width: 70px;
   }
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
 @media (max-width: 1024px) {
   .table-wrapper {
     max-width: 100%;
   }
   .custom-datatable {
     font-size: 0.9rem;
-<<<<<<< HEAD
-=======
   }
   .custom-datatable {
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
     overflow-x: auto;
   }
   .custom-datatable .p-datatable-thead > tr > th,
@@ -302,18 +191,6 @@
 @media (max-width: 960px) {
   .employee-dialog {
     width: 75vw;
-<<<<<<< HEAD
-    max-width: 700px;
-  }
-  .employee-dialog .grid-nogutter .col-12 {
-    flex: 0 0 100%;
-  }
-  .employee-dialog .grid-nogutter .md\:col-6 {
-    flex: 0 0 50%;
-  }
-  .employee-dialog .grid-nogutter .lg\:col-4 {
-    flex: 0 0 100%;
-=======
   }
   .button-group {
     flex-wrap: wrap;
@@ -326,24 +203,12 @@
   .custom-datatable .p-datatable-tbody > tr > td {
     min-width: 60px;
     font-size: 0.85rem;
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
   }
 }
 
 @media (max-width: 640px) {
   .employee-dialog {
     width: 90vw;
-<<<<<<< HEAD
-    max-width: 500px;
-  }
-  .employee-dialog .grid-nogutter .col-12,
-  .employee-dialog .grid-nogutter .md\:col-6,
-  .employee-dialog .grid-nogutter .lg\:col-4 {
-    flex: 0 0 100%;
-  }
-}
-
-=======
   }
   .app-title {
     font-size: 1.2rem;
@@ -367,7 +232,6 @@
     font-size: 0.75rem;
   }
 }
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
 @media (max-width: 480px) {
   .app-title {
     font-size: 1rem;
@@ -386,8 +250,6 @@
   }
 }
 
-<<<<<<< HEAD
-=======
 /* view card title */
 .employee-dialog .p-dialog-title {
   width: 100%;
@@ -422,7 +284,6 @@
   padding: 1rem;
 }
 
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
 @media (max-width: 600px) {
   .employee-form-dialog .p-dialog-content {
     padding: 0.5rem;

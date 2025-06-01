@@ -19,19 +19,9 @@ const App = () => {
   const [viewDialogVisible, setViewDialogVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [viewedEmployee, setViewedEmployee] = useState(null);
-<<<<<<< HEAD
-  const [selectedRow, setSelectedRow] = useState(null);
-  const [loading, setLoading] = useState(false); // Loading state for fetch
-  const [isManualRefresh, setIsManualRefresh] = useState(false); // Flag for manual refresh
   const toast = useRef(null);
 
   useEffect(() => {
-    // Initial fetch without notification
-=======
-  const toast = useRef(null);
-
-  useEffect(() => {
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
     fetchEmployees();
   }, []);
 
@@ -50,49 +40,6 @@ const App = () => {
   }, [searchTerm, employees]);
 
   const fetchEmployees = async () => {
-<<<<<<< HEAD
-    if (loading) return; // Prevent multiple concurrent fetches
-    setLoading(true);
-    try {
-      const response = await axios.get("http://localhost:3000/api/employees");
-      console.log("Fetched employees:", response.data);
-      setEmployees(response.data);
-      setFilteredEmployees(response.data);
-      // Reset selected states
-      setSelectedEmployees([]);
-      setSelectedRow(null);
-      // Show notification only for manual refresh
-      if (isManualRefresh) {
-        toast.current.show({
-          severity: "success",
-          summary: "Success",
-          detail: "Data refreshed successfully",
-          life: 3000,
-        });
-        setIsManualRefresh(false); // Reset the flag after showing notification
-      }
-    } catch (error) {
-      console.error("Error fetching employees:", error);
-      if (isManualRefresh) {
-        toast.current.show({
-          severity: "error",
-          summary: "Error",
-          detail: "Failed to fetch employees",
-          life: 3000,
-        });
-        setIsManualRefresh(false); // Reset the flag after showing notification
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleRowClick = (event) => {
-    const rowData = event.data;
-    setSelectedRow(rowData);
-    if (!selectedEmployees.includes(rowData)) {
-      setSelectedEmployees([rowData]);
-=======
     try {
       const response = await axios.get("http://localhost:3000/api/employees");
       console.log("Fetched employees:", response.data); // Debug log
@@ -105,7 +52,6 @@ const App = () => {
         detail: "Failed to fetch employees",
         life: 3000,
       });
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
     }
   };
 
@@ -116,11 +62,7 @@ const App = () => {
 
   const handleEdit = () => {
     if (selectedEmployees.length === 1) {
-<<<<<<< HEAD
-      console.log("Selected employee for edit:", selectedEmployees[0]);
-=======
       console.log("Selected employee for edit:", selectedEmployees[0]); // Debug log
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
       setIsEditMode(true);
       setDialogVisible(true);
     } else {
@@ -203,21 +145,6 @@ const App = () => {
     return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
   };
 
-<<<<<<< HEAD
-  const formatLastUpdated = (lastUpdated) => {
-    if (!lastUpdated) return "N/A";
-    const match = lastUpdated.match(/DateTime:([^ ]+)/);
-    if (match) {
-      const date = new Date(match[1]);
-      return isNaN(date.getTime())
-        ? "N/A"
-        : `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} ${date.toLocaleTimeString()}`;
-    }
-    return lastUpdated;
-  };
-
-=======
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
   const parseEmployeeDates = (employee) => {
     if (!employee) return employee;
     const dateFields = [
@@ -244,25 +171,6 @@ const App = () => {
     return parsed;
   };
 
-<<<<<<< HEAD
-  const onSave = async (updatedEmployee) => {
-    await fetchEmployees();
-    if (isEditMode && updatedEmployee) {
-      const updatedSelected = selectedEmployees.map((emp) =>
-        emp.emp_id === updatedEmployee.emp_id ? updatedEmployee : emp
-      );
-      setSelectedEmployees(updatedSelected);
-      setSelectedRow(updatedEmployee);
-    }
-  };
-
-  const handleRefresh = () => {
-    setIsManualRefresh(true); // Set flag for manual refresh
-    fetchEmployees();
-  };
-
-=======
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
   return (
     <div className="app-container">
       <Toast ref={toast} />
@@ -299,12 +207,7 @@ const App = () => {
             label="Refresh"
             icon="pi pi-refresh"
             className="p-button-warning p-button-outlined"
-<<<<<<< HEAD
-            onClick={handleRefresh} // Use separate handler
-            disabled={loading}
-=======
             onClick={fetchEmployees}
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
           />
           <Button
             label="Download"
@@ -328,11 +231,6 @@ const App = () => {
           selectionMode="multiple"
           selection={selectedEmployees}
           onSelectionChange={(e) => setSelectedEmployees(e.value)}
-<<<<<<< HEAD
-          onRowClick={handleRowClick}
-          rowClassName={(data) => (data === selectedRow ? "highlighted-row" : "")}
-=======
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
           paginator
           rows={10}
           rowsPerPageOptions={[5, 10, 25]}
@@ -341,11 +239,7 @@ const App = () => {
           removableSort
           scrollable
           scrollHeight="1000px"
-<<<<<<< HEAD
-          loading={loading || filteredEmployees.length === 0}
-=======
           loading={filteredEmployees.length === 0}
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
           dataKey="emp_id"
         >
           <Column selectionMode="multiple" exportable={false} />
@@ -469,11 +363,7 @@ const App = () => {
           <Column
             field="last_updated"
             header="Last Updated"
-<<<<<<< HEAD
-            body={(rowData) => formatLastUpdated(rowData.last_updated)}
-=======
             body={(rowData) => rowData.last_updated || "N/A"}
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
             sortable
           />
         </DataTable>
@@ -494,183 +384,22 @@ const App = () => {
           employee={
             isEditMode ? parseEmployeeDates(selectedEmployees[0]) : null
           }
-<<<<<<< HEAD
-          onSave={onSave}
-=======
           onSave={fetchEmployees}
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
           isEditMode={isEditMode}
           toast={toast}
         />
 
         <Dialog
-<<<<<<< HEAD
-          header={`Employee Details - ${viewedEmployee ? `${viewedEmployee.first_name} ${viewedEmployee.last_name}` : ""}`}
-=======
           header={`Employee Details - ${
             viewedEmployee
               ? `${viewedEmployee.first_name} ${viewedEmployee.last_name}`
               : ""
           }`}
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
           visible={viewDialogVisible}
           onHide={() => setViewDialogVisible(false)}
           className="employee-dialog"
           breakpoints={{ "960px": "75vw", "641px": "90vw" }}
           modal
-<<<<<<< HEAD
-          style={{ maxHeight: "80vh", overflowY: "auto" }}
-        >
-          {viewedEmployee && (
-            <div className="p-4">
-              <div className="grid">
-                {/* Personal Information */}
-                <div className="col-12">
-                  <Card title="Personal Information" className="mb-4">
-                    <div className="grid grid-nogutter">
-                      {[
-                        { label: "Employee ID", value: viewedEmployee.emp_id },
-                        { label: "First Name", value: viewedEmployee.first_name },
-                        { label: "Middle Name", value: viewedEmployee.middle_name },
-                        { label: "Last Name", value: viewedEmployee.last_name },
-                        { label: "Suffix", value: viewedEmployee.suffix },
-                        { label: "Sex", value: viewedEmployee.sex },
-                        { label: "Birthday", value: formatDate(viewedEmployee.birthday) },
-                        { label: "Email", value: viewedEmployee.email },
-                        { label: "Phone", value: viewedEmployee.phone },
-                        { label: "Address", value: viewedEmployee.address },
-                        { label: "City", value: viewedEmployee.city },
-                        { label: "Province", value: viewedEmployee.province },
-                        { label: "Zip", value: viewedEmployee.zip },
-                      ].map((item, index) => (
-                        <div key={index} className="col-12 md:col-6 lg:col-4 p-2">
-                          <div className="flex flex-col">
-                            <span className="font-bold text-base text-gray-700">{item.label}:</span>
-                            <span className="text-base text-gray-900">{item.value || "N/A"}</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </Card>
-                </div>
-
-                {/* Employment Details */}
-                <div className="col-12">
-                  <Card title="Employment Details" className="mb-4">
-                    <div className="grid grid-nogutter">
-                      {[
-                        { label: "Location", value: viewedEmployee.location },
-                        { label: "Department", value: viewedEmployee.department },
-                        { label: "Project", value: viewedEmployee.project },
-                        { label: "Team", value: viewedEmployee.team },
-                        { label: "Position", value: viewedEmployee.position },
-                        { label: "Employment Type", value: viewedEmployee.employment_type },
-                        { label: "User Profile", value: viewedEmployee.user_profile },
-                        { label: "Manager", value: viewedEmployee.manager },
-                        { label: "Vendor", value: viewedEmployee.vendor },
-                        { label: "Active", value: viewedEmployee.active ? "Yes" : "No", checkmark: true },
-                      ].map((item, index) => (
-                        <div key={index} className="col-12 md:col-6 lg:col-4 p-2">
-                          <div className="flex flex-col">
-                            <span className="font-bold text-base text-gray-700">{item.label}:</span>
-                            <span className="text-base text-gray-900">
-                              {item.checkmark
-                                ? item.value === "Yes"
-                                  ? "✓"
-                                  : item.value || "N/A"
-                                : item.value || "N/A"}
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </Card>
-                </div>
-
-                {/* Dates */}
-                <div className="col-12">
-                  <Card title="Dates" className="mb-4">
-                    <div className="grid grid-nogutter">
-                      {[
-                        { label: "Date Hired", value: formatDate(viewedEmployee.date_hired) },
-                        { label: "Date Regularized", value: formatDate(viewedEmployee.date_regularized) },
-                        { label: "Date Separated", value: formatDate(viewedEmployee.date_separated) },
-                        { label: "Contract Start", value: formatDate(viewedEmployee.contract_start) },
-                        { label: "Contract End", value: formatDate(viewedEmployee.contract_end) },
-                        { label: "Last Updated", value: formatLastUpdated(viewedEmployee.last_updated) },
-                        { label: "Minimum Wage Earner", value: viewedEmployee.minimum_wage_earner ? "Yes" : "No", checkmark: true },
-                        { label: "Kasambahay", value: viewedEmployee.kasambahay ? "Yes" : "No", checkmark: true },
-                      ].map((item, index) => (
-                        <div key={index} className="col-12 md:col-6 lg:col-4 p-2">
-                          <div className="flex flex-col">
-                            <span className="font-bold text-base text-gray-700">{item.label}:</span>
-                            <span className="text-base text-gray-900">
-                              {item.checkmark
-                                ? item.value === "Yes"
-                                  ? "✓"
-                                  : item.value || "N/A"
-                                : item.value || "N/A"}
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </Card>
-                </div>
-
-                {/* Compensation */}
-                <div className="col-12">
-                  <Card title="Compensation" className="mb-4">
-                    <div className="grid grid-nogutter">
-                      {[
-                        { label: "Monthly Rate", value: viewedEmployee.monthly_rate },
-                        { label: "Daily Rate", value: viewedEmployee.daily_rate },
-                        { label: "Hourly Rate", value: viewedEmployee.hourly_rate },
-                        { label: "Days/Month", value: viewedEmployee.days_per_month },
-                        { label: "Hours/Day", value: viewedEmployee.hours_per_day },
-                        { label: "Cost of Living", value: viewedEmployee.cost_of_living },
-                        { label: "Rep Allowance", value: viewedEmployee.representation_allowance },
-                        { label: "Housing Allowance", value: viewedEmployee.housing_allowance },
-                        { label: "Trans Allowance", value: viewedEmployee.transportation_allowance },
-                      ].map((item, index) => (
-                        <div key={index} className="col-12 md:col-6 lg:col-4 p-2">
-                          <div className="flex flex-col">
-                            <span className="font-bold text-base text-gray-700">{item.label}:</span>
-                            <span className="text-base text-gray-900">{item.value || "N/A"}</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </Card>
-                </div>
-
-                {/* Government IDs & Bank Info */}
-                <div className="col-12">
-                  <Card title="Government IDs & Bank Info">
-                    <div className="grid grid-nogutter">
-                      {[
-                        { label: "Tax ID", value: viewedEmployee.tax_id },
-                        { label: "SSS Number", value: viewedEmployee.sss_number },
-                        { label: "PhilHealth ID", value: viewedEmployee.philhealth_id },
-                        { label: "HDMF ID", value: viewedEmployee.hdmf_id },
-                        { label: "HDMF Account", value: viewedEmployee.hdmf_account },
-                        { label: "Bank Name", value: viewedEmployee.bank_name },
-                        { label: "Bank Account", value: viewedEmployee.bank_account },
-                        { label: "CTC ID", value: viewedEmployee.ctc_id },
-                        { label: "CTC Place", value: viewedEmployee.ctc_place },
-                        { label: "CTC Date", value: formatDate(viewedEmployee.ctc_date) },
-                      ].map((item, index) => (
-                        <div key={index} className="col-12 md:col-6 lg:col-4 p-2">
-                          <div className="flex flex-col">
-                            <span className="font-bold text-base text-gray-700">{item.label}:</span>
-                            <span className="text-base text-gray-900">{item.value || "N/A"}</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </Card>
-                </div>
-=======
         >
           {viewedEmployee && (
             <div className="grid">
@@ -909,7 +638,6 @@ const App = () => {
                     </div>
                   </div>
                 </Card>
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
               </div>
             </div>
           )}
@@ -919,8 +647,4 @@ const App = () => {
   );
 };
 
-<<<<<<< HEAD
 export default App;
-=======
-export default App;
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0

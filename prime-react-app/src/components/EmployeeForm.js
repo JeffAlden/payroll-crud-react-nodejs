@@ -81,20 +81,7 @@ const EmployeeForm = ({
   useEffect(() => {
     if (isEditMode && employee && visible) {
       console.log("Employee prop received in EmployeeForm:", employee);
-<<<<<<< HEAD
-      const updatedFormData = {
-        ...employee,
-        active: employee.active === true || employee.active === "Yes" || employee.active === "true",
-        kasambahay: employee.kasambahay === true || employee.kasambahay === "Yes" || employee.kasambahay === "true",
-        minimum_wage_earner:
-          employee.minimum_wage_earner === true ||
-          employee.minimum_wage_earner === "Yes" ||
-          employee.minimum_wage_earner === "true",
-      };
-      setFormData(updatedFormData);
-=======
       setFormData({ ...employee });
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
     } else if (!isEditMode && visible) {
       console.log("Resetting form for add mode");
       setFormData(initialEmployeeState);
@@ -118,23 +105,14 @@ const EmployeeForm = ({
 
   const validateForm = () => {
     const newErrors = {};
-<<<<<<< HEAD
-    const today = new Date();
-=======
     const today = new Date(); // Current date
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
     const eighteenYearsAgo = new Date(
       today.getFullYear() - 18,
       today.getMonth(),
       today.getDate()
-<<<<<<< HEAD
-    );
-
-=======
     ); // Date 18 years ago
 
     // Required fields
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
     if (!formData.emp_id) newErrors.emp_id = "Please enter an Employee ID.";
     if (!formData.first_name)
       newErrors.first_name = "Please enter the employee's First Name.";
@@ -167,10 +145,7 @@ const EmployeeForm = ({
     if (!formData.employment_type)
       newErrors.employment_type = "Please select an Employment Type.";
 
-<<<<<<< HEAD
-=======
     // Optional fields with validation
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
     if (formData.phone && !/^\d{11}$/.test(formData.phone))
       newErrors.phone =
         "Phone number must be exactly 11 digits (e.g., 09954654818).";
@@ -263,12 +238,7 @@ const EmployeeForm = ({
       const method = isEditMode ? "put" : "post";
       const response = await axios[method](url, updatedEmployee);
       console.log("Backend response:", response.data);
-<<<<<<< HEAD
-      // Pass the updated employee data back to App.js via onSave
-      onSave(updatedEmployee);
-=======
       onSave();
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
       onHide();
       toast.current.show({
         severity: "success",
@@ -291,11 +261,7 @@ const EmployeeForm = ({
     <Dialog
       header={isEditMode ? "Edit Employee" : "Add Employee"}
       visible={visible}
-<<<<<<< HEAD
-      style={{ width: "95vw", maxWidth: 800 }}
-=======
       style={{ width: "90vw", maxWidth: 600 }}
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
       onHide={onHide}
       className="employee-form-dialog"
     >
@@ -968,16 +934,6 @@ const EmployeeForm = ({
         }}
       >
         <div className="flex gap-2 justify-end">
-<<<<<<< HEAD
-          <Button
-            label="Cancel"
-            icon="pi pi-times"
-            className="p-button-secondary"
-            onClick={onHide}
-          />
-          <Button label="Save" icon="pi pi-check" onClick={handleSave} />
-        </div>
-=======
   <Button
     label="Cancel"
     icon="pi pi-times"
@@ -986,14 +942,9 @@ const EmployeeForm = ({
   />
   <Button label="Save" icon="pi pi-check" onClick={handleSave} />
 </div>
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
       </div>
     </Dialog>
   );
 };
 
-<<<<<<< HEAD
 export default EmployeeForm;
-=======
-export default EmployeeForm;
->>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
