@@ -24,7 +24,11 @@ The backend is a Node.js/Express server that provides a REST API for payroll CRU
    ```
 
 The current dependencies in package.json are:
+<<<<<<< HEAD
 - `axios`: For making HTTP requests (though not currently used in the backend).
+=======
+- `axios`: For making HTTP requests 
+>>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
 - `cors`: Enables CORS for frontend-backend communication.
 - `dotenv`: Manages environment variables.
 - `express`: Web framework for Node.js.

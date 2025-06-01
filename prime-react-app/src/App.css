@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* ============================= */
 /* 1. Global Layout Styles       */
 /* ============================= */
@@ -103,6 +104,7 @@
   display: none !important;
 }
 
+<<<<<<< HEAD
 /* Center DataTable header text (global, in case custom-datatable is not used) */
 .p-datatable .p-datatable-thead > tr > th {
   text-align: center !important;
@@ -112,15 +114,24 @@
 /* ============================= */
 /* 4. Dialog and Card Styling    */
 /* ============================= */
+=======
+/* =================== */
+/* 4. Dialog and Card Styling */
+/* =================== */
+>>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
 
 /* Style for employee view dialog */
 .employee-dialog {
   width: 70vw;
+<<<<<<< HEAD
   max-width: 900px;
+=======
+>>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
 }
 
 /* Center text inside employee details cards */
 .employee-dialog .p-card-content p {
+<<<<<<< HEAD
   text-align: left;
   margin: 0.5rem 0;
 }
@@ -159,6 +170,19 @@
 /* ============================= */
 /* 5. Additional UI Elements     */
 /* ============================= */
+=======
+  text-align: center;
+}
+
+/* Optional spacing between card fields */
+.employee-dialog .p-card-content p {
+  margin: 0.5rem 0;
+}
+
+/* =================== */
+/* 5. Additional UI Elements */
+/* =================== */
+>>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
 
 /* Change log at the bottom of the table */
 .change-log {
@@ -218,6 +242,11 @@
   }
   .custom-datatable {
     font-size: 0.9rem;
+<<<<<<< HEAD
+=======
+  }
+  .custom-datatable {
+>>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
     overflow-x: auto;
   }
   .custom-datatable .p-datatable-thead > tr > th,
@@ -225,13 +254,21 @@
     min-width: 80px;
   }
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
 @media (max-width: 1200px) {
   .table-wrapper {
     max-width: 100%;
   }
   .custom-datatable {
     font-size: 0.9rem;
+<<<<<<< HEAD
+=======
+  }
+  .custom-datatable {
+>>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
     overflow-x: auto;
   }
   .custom-datatable .p-datatable-thead > tr > th,
@@ -239,13 +276,21 @@
     min-width: 70px;
   }
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
 @media (max-width: 1024px) {
   .table-wrapper {
     max-width: 100%;
   }
   .custom-datatable {
     font-size: 0.9rem;
+<<<<<<< HEAD
+=======
+  }
+  .custom-datatable {
+>>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
     overflow-x: auto;
   }
   .custom-datatable .p-datatable-thead > tr > th,
@@ -257,6 +302,7 @@
 @media (max-width: 960px) {
   .employee-dialog {
     width: 75vw;
+<<<<<<< HEAD
     max-width: 700px;
   }
   .employee-dialog .grid-nogutter .col-12 {
@@ -267,12 +313,27 @@
   }
   .employee-dialog .grid-nogutter .lg\:col-4 {
     flex: 0 0 100%;
+=======
+  }
+  .button-group {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .search-input {
+    max-width: 20rem;
+  }
+  .custom-datatable .p-datatable-thead > tr > th,
+  .custom-datatable .p-datatable-tbody > tr > td {
+    min-width: 60px;
+    font-size: 0.85rem;
+>>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
   }
 }
 
 @media (max-width: 640px) {
   .employee-dialog {
     width: 90vw;
+<<<<<<< HEAD
     max-width: 500px;
   }
   .employee-dialog .grid-nogutter .col-12,
@@ -282,6 +343,31 @@
   }
 }
 
+=======
+  }
+  .app-title {
+    font-size: 1.2rem;
+  }
+  .button-group {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .search-input {
+    max-width: 15rem;
+  }
+  .custom-datatable {
+    font-size: 0.8rem;
+  }
+  .change-log {
+    font-size: 0.9rem;
+  }
+  .custom-datatable .p-datatable-thead > tr > th,
+  .custom-datatable .p-datatable-tbody > tr > td {
+    min-width: 50px;
+    font-size: 0.75rem;
+  }
+}
+>>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
 @media (max-width: 480px) {
   .app-title {
     font-size: 1rem;
@@ -300,6 +386,43 @@
   }
 }
 
+<<<<<<< HEAD
+=======
+/* view card title */
+.employee-dialog .p-dialog-title {
+  width: 100%;
+  text-align: center;
+}
+
+/* view card title header */
+.p-card-title {
+  text-align: center;
+  width: 100%;
+}
+
+/* add buttons */
+.justify-end {
+  justify-content: flex-end;
+}
+
+/* add edit employee  */
+.employee-form-dialog .p-dialog-title {
+  width: 100%;
+  text-align: center;
+}
+
+/* Darken PrimeReact buttons on click (active state) */
+.p-button:active,
+.p-button:focus:active {
+  filter: brightness(0.85);
+}
+
+/* Responsive Employee Form Dialog */
+.employee-form-dialog .p-dialog-content {
+  padding: 1rem;
+}
+
+>>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
 @media (max-width: 600px) {
   .employee-form-dialog .p-dialog-content {
     padding: 0.5rem;

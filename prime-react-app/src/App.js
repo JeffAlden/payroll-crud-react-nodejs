@@ -19,6 +19,7 @@ const App = () => {
   const [viewDialogVisible, setViewDialogVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [viewedEmployee, setViewedEmployee] = useState(null);
+<<<<<<< HEAD
   const [selectedRow, setSelectedRow] = useState(null);
   const [loading, setLoading] = useState(false); // Loading state for fetch
   const [isManualRefresh, setIsManualRefresh] = useState(false); // Flag for manual refresh
@@ -26,6 +27,11 @@ const App = () => {
 
   useEffect(() => {
     // Initial fetch without notification
+=======
+  const toast = useRef(null);
+
+  useEffect(() => {
+>>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
     fetchEmployees();
   }, []);
 
@@ -44,6 +50,7 @@ const App = () => {
   }, [searchTerm, employees]);
 
   const fetchEmployees = async () => {
+<<<<<<< HEAD
     if (loading) return; // Prevent multiple concurrent fetches
     setLoading(true);
     try {
@@ -85,6 +92,20 @@ const App = () => {
     setSelectedRow(rowData);
     if (!selectedEmployees.includes(rowData)) {
       setSelectedEmployees([rowData]);
+=======
+    try {
+      const response = await axios.get("http://localhost:3000/api/employees");
+      console.log("Fetched employees:", response.data); // Debug log
+      setEmployees(response.data);
+      setFilteredEmployees(response.data);
+    } catch (error) {
+      toast.current.show({
+        severity: "error",
+        summary: "Error",
+        detail: "Failed to fetch employees",
+        life: 3000,
+      });
+>>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
     }
   };
 
@@ -95,7 +116,11 @@ const App = () => {
 
   const handleEdit = () => {
     if (selectedEmployees.length === 1) {
+<<<<<<< HEAD
       console.log("Selected employee for edit:", selectedEmployees[0]);
+=======
+      console.log("Selected employee for edit:", selectedEmployees[0]); // Debug log
+>>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
       setIsEditMode(true);
       setDialogVisible(true);
     } else {
@@ -178,6 +203,7 @@ const App = () => {
     return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
   };
 
+<<<<<<< HEAD
   const formatLastUpdated = (lastUpdated) => {
     if (!lastUpdated) return "N/A";
     const match = lastUpdated.match(/DateTime:([^ ]+)/);
@@ -190,6 +216,8 @@ const App = () => {
     return lastUpdated;
   };
 
+=======
+>>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
   const parseEmployeeDates = (employee) => {
     if (!employee) return employee;
     const dateFields = [
@@ -216,6 +244,7 @@ const App = () => {
     return parsed;
   };
 
+<<<<<<< HEAD
   const onSave = async (updatedEmployee) => {
     await fetchEmployees();
     if (isEditMode && updatedEmployee) {
@@ -232,6 +261,8 @@ const App = () => {
     fetchEmployees();
   };
 
+=======
+>>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
   return (
     <div className="app-container">
       <Toast ref={toast} />
@@ -268,8 +299,12 @@ const App = () => {
             label="Refresh"
             icon="pi pi-refresh"
             className="p-button-warning p-button-outlined"
+<<<<<<< HEAD
             onClick={handleRefresh} // Use separate handler
             disabled={loading}
+=======
+            onClick={fetchEmployees}
+>>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
           />
           <Button
             label="Download"
@@ -293,8 +328,11 @@ const App = () => {
           selectionMode="multiple"
           selection={selectedEmployees}
           onSelectionChange={(e) => setSelectedEmployees(e.value)}
+<<<<<<< HEAD
           onRowClick={handleRowClick}
           rowClassName={(data) => (data === selectedRow ? "highlighted-row" : "")}
+=======
+>>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
           paginator
           rows={10}
           rowsPerPageOptions={[5, 10, 25]}
@@ -303,7 +341,11 @@ const App = () => {
           removableSort
           scrollable
           scrollHeight="1000px"
+<<<<<<< HEAD
           loading={loading || filteredEmployees.length === 0}
+=======
+          loading={filteredEmployees.length === 0}
+>>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
           dataKey="emp_id"
         >
           <Column selectionMode="multiple" exportable={false} />
@@ -427,7 +469,11 @@ const App = () => {
           <Column
             field="last_updated"
             header="Last Updated"
+<<<<<<< HEAD
             body={(rowData) => formatLastUpdated(rowData.last_updated)}
+=======
+            body={(rowData) => rowData.last_updated || "N/A"}
+>>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
             sortable
           />
         </DataTable>
@@ -448,18 +494,31 @@ const App = () => {
           employee={
             isEditMode ? parseEmployeeDates(selectedEmployees[0]) : null
           }
+<<<<<<< HEAD
           onSave={onSave}
+=======
+          onSave={fetchEmployees}
+>>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
           isEditMode={isEditMode}
           toast={toast}
         />
 
         <Dialog
+<<<<<<< HEAD
           header={`Employee Details - ${viewedEmployee ? `${viewedEmployee.first_name} ${viewedEmployee.last_name}` : ""}`}
+=======
+          header={`Employee Details - ${
+            viewedEmployee
+              ? `${viewedEmployee.first_name} ${viewedEmployee.last_name}`
+              : ""
+          }`}
+>>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
           visible={viewDialogVisible}
           onHide={() => setViewDialogVisible(false)}
           className="employee-dialog"
           breakpoints={{ "960px": "75vw", "641px": "90vw" }}
           modal
+<<<<<<< HEAD
           style={{ maxHeight: "80vh", overflowY: "auto" }}
         >
           {viewedEmployee && (
@@ -611,6 +670,246 @@ const App = () => {
                     </div>
                   </Card>
                 </div>
+=======
+        >
+          {viewedEmployee && (
+            <div className="grid">
+              <div className="col-12 md:col-6">
+                <Card title="Personal Information" className="mb-3">
+                  <div className="grid">
+                    <div className="col-6 ">
+                      <p>
+                        <strong>Employee ID:</strong>{" "}
+                        {viewedEmployee.emp_id || "N/A"}
+                      </p>
+                      <p>
+                        <strong>First Name:</strong>{" "}
+                        {viewedEmployee.first_name || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Middle Name:</strong>{" "}
+                        {viewedEmployee.middle_name || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Last Name:</strong>{" "}
+                        {viewedEmployee.last_name || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Suffix:</strong>{" "}
+                        {viewedEmployee.suffix || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Sex:</strong> {viewedEmployee.sex || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Birthday:</strong>{" "}
+                        {formatDate(viewedEmployee.birthday)}
+                      </p>
+                    </div>
+                    <div className="col-6">
+                      <p>
+                        <strong>Email:</strong> {viewedEmployee.email || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Phone:</strong> {viewedEmployee.phone || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Address:</strong>{" "}
+                        {viewedEmployee.address || "N/A"}
+                      </p>
+                      <p>
+                        <strong>City:</strong> {viewedEmployee.city || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Province:</strong>{" "}
+                        {viewedEmployee.province || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Zip:</strong> {viewedEmployee.zip || "N/A"}
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+
+                <Card title="Employment Details" className="mb-3">
+                  <div className="grid">
+                    <div className="col-6">
+                      <p>
+                        <strong>Location:</strong>{" "}
+                        {viewedEmployee.location || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Department:</strong>{" "}
+                        {viewedEmployee.department || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Project:</strong>{" "}
+                        {viewedEmployee.project || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Team:</strong> {viewedEmployee.team || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Position:</strong>{" "}
+                        {viewedEmployee.position || "N/A"}
+                      </p>
+                    </div>
+                    <div className="col-6">
+                      <p>
+                        <strong>Employment Type:</strong>{" "}
+                        {viewedEmployee.employment_type || "N/A"}
+                      </p>
+                      <p>
+                        <strong>User Profile:</strong>{" "}
+                        {viewedEmployee.user_profile || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Manager:</strong>{" "}
+                        {viewedEmployee.manager || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Vendor:</strong>{" "}
+                        {viewedEmployee.vendor || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Active:</strong>{" "}
+                        {viewedEmployee.active ? "Yes" : "No"}
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+              </div>
+
+              <div className="col-12 md:col-6">
+                <Card title="Dates" className="mb-3">
+                  <div className="grid">
+                    <div className="col-6">
+                      <p>
+                        <strong>Date Hired:</strong>{" "}
+                        {formatDate(viewedEmployee.date_hired)}
+                      </p>
+                      <p>
+                        <strong>Date Regularized:</strong>{" "}
+                        {formatDate(viewedEmployee.date_regularized)}
+                      </p>
+                      <p>
+                        <strong>Date Separated:</strong>{" "}
+                        {formatDate(viewedEmployee.date_separated)}
+                      </p>
+                    </div>
+                    <div className="col-6">
+                      <p>
+                        <strong>Contract Start:</strong>{" "}
+                        {formatDate(viewedEmployee.contract_start)}
+                      </p>
+                      <p>
+                        <strong>Contract End:</strong>{" "}
+                        {formatDate(viewedEmployee.contract_end)}
+                      </p>
+                      <p>
+                        <strong>Last Updated:</strong>{" "}
+                        {viewedEmployee.last_updated || "N/A"}
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+
+                <Card title="Compensation" className="mb-3">
+                  <div className="grid">
+                    <div className="col-6">
+                      <p>
+                        <strong>Monthly Rate:</strong>{" "}
+                        {viewedEmployee.monthly_rate || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Daily Rate:</strong>{" "}
+                        {viewedEmployee.daily_rate || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Hourly Rate:</strong>{" "}
+                        {viewedEmployee.hourly_rate || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Days/Month:</strong>{" "}
+                        {viewedEmployee.days_per_month || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Hours/Day:</strong>{" "}
+                        {viewedEmployee.hours_per_day || "N/A"}
+                      </p>
+                    </div>
+                    <div className="col-6">
+                      <p>
+                        <strong>Cost of Living:</strong>{" "}
+                        {viewedEmployee.cost_of_living || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Rep Allowance:</strong>{" "}
+                        {viewedEmployee.representation_allowance || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Housing Allowance:</strong>{" "}
+                        {viewedEmployee.housing_allowance || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Trans Allowance:</strong>{" "}
+                        {viewedEmployee.transportation_allowance || "N/A"}
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+              </div>
+
+              <div className="col-12">
+                <Card title="Government IDs & Bank Info">
+                  <div className="grid">
+                    <div className="col-6">
+                      <p>
+                        <strong>Tax ID:</strong>{" "}
+                        {viewedEmployee.tax_id || "N/A"}
+                      </p>
+                      <p>
+                        <strong>SSS Number:</strong>{" "}
+                        {viewedEmployee.sss_number || "N/A"}
+                      </p>
+                      <p>
+                        <strong>PhilHealth ID:</strong>{" "}
+                        {viewedEmployee.philhealth_id || "N/A"}
+                      </p>
+                      <p>
+                        <strong>HDMF ID:</strong>{" "}
+                        {viewedEmployee.hdmf_id || "N/A"}
+                      </p>
+                      <p>
+                        <strong>HDMF Account:</strong>{" "}
+                        {viewedEmployee.hdmf_account || "N/A"}
+                      </p>
+                    </div>
+                    <div className="col-6">
+                      <p>
+                        <strong>Bank Name:</strong>{" "}
+                        {viewedEmployee.bank_name || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Bank Account:</strong>{" "}
+                        {viewedEmployee.bank_account || "N/A"}
+                      </p>
+                      <p>
+                        <strong>CTC ID:</strong>{" "}
+                        {viewedEmployee.ctc_id || "N/A"}
+                      </p>
+                      <p>
+                        <strong>CTC Place:</strong>{" "}
+                        {viewedEmployee.ctc_place || "N/A"}
+                      </p>
+                      <p>
+                        <strong>CTC Date:</strong>{" "}
+                        {formatDate(viewedEmployee.ctc_date)}
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+>>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
               </div>
             </div>
           )}
@@ -620,4 +919,8 @@ const App = () => {
   );
 };
 
+<<<<<<< HEAD
 export default App;
+=======
+export default App;
+>>>>>>> cbcfb84ce78d4b34b32bd227b277ab3ce619f7e0
