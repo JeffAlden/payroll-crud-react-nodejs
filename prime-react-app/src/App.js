@@ -19,9 +19,13 @@ const App = () => {
   const [viewDialogVisible, setViewDialogVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [viewedEmployee, setViewedEmployee] = useState(null);
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [loading, setLoading] = useState(false); // Loading state for fetch
+  const [isManualRefresh, setIsManualRefresh] = useState(false); // Flag for manual refresh
   const toast = useRef(null);
 
   useEffect(() => {
+    // Initial fetch without notification
     fetchEmployees();
   }, []);
 
@@ -40,18 +44,47 @@ const App = () => {
   }, [searchTerm, employees]);
 
   const fetchEmployees = async () => {
+    if (loading) return; // Prevent multiple concurrent fetches
+    setLoading(true);
     try {
       const response = await axios.get("http://localhost:3000/api/employees");
-      console.log("Fetched employees:", response.data); // Debug log
+      console.log("Fetched employees:", response.data);
       setEmployees(response.data);
       setFilteredEmployees(response.data);
+      // Reset selected states
+      setSelectedEmployees([]);
+      setSelectedRow(null);
+      // Show notification only for manual refresh
+      if (isManualRefresh) {
+        toast.current.show({
+          severity: "success",
+          summary: "Success",
+          detail: "Data refreshed successfully",
+          life: 3000,
+        });
+        setIsManualRefresh(false); // Reset the flag after showing notification
+      }
     } catch (error) {
-      toast.current.show({
-        severity: "error",
-        summary: "Error",
-        detail: "Failed to fetch employees",
-        life: 3000,
-      });
+      console.error("Error fetching employees:", error);
+      if (isManualRefresh) {
+        toast.current.show({
+          severity: "error",
+          summary: "Error",
+          detail: "Failed to fetch employees",
+          life: 3000,
+        });
+        setIsManualRefresh(false); // Reset the flag after showing notification
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRowClick = (event) => {
+    const rowData = event.data;
+    setSelectedRow(rowData);
+    if (!selectedEmployees.includes(rowData)) {
+      setSelectedEmployees([rowData]);
     }
   };
 
@@ -62,7 +95,7 @@ const App = () => {
 
   const handleEdit = () => {
     if (selectedEmployees.length === 1) {
-      console.log("Selected employee for edit:", selectedEmployees[0]); // Debug log
+      console.log("Selected employee for edit:", selectedEmployees[0]);
       setIsEditMode(true);
       setDialogVisible(true);
     } else {
@@ -145,6 +178,18 @@ const App = () => {
     return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
   };
 
+  const formatLastUpdated = (lastUpdated) => {
+    if (!lastUpdated) return "N/A";
+    const match = lastUpdated.match(/DateTime:([^ ]+)/);
+    if (match) {
+      const date = new Date(match[1]);
+      return isNaN(date.getTime())
+        ? "N/A"
+        : `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} ${date.toLocaleTimeString()}`;
+    }
+    return lastUpdated;
+  };
+
   const parseEmployeeDates = (employee) => {
     if (!employee) return employee;
     const dateFields = [
@@ -169,6 +214,22 @@ const App = () => {
     });
     console.log("Parsed employee dates:", parsed);
     return parsed;
+  };
+
+  const onSave = async (updatedEmployee) => {
+    await fetchEmployees();
+    if (isEditMode && updatedEmployee) {
+      const updatedSelected = selectedEmployees.map((emp) =>
+        emp.emp_id === updatedEmployee.emp_id ? updatedEmployee : emp
+      );
+      setSelectedEmployees(updatedSelected);
+      setSelectedRow(updatedEmployee);
+    }
+  };
+
+  const handleRefresh = () => {
+    setIsManualRefresh(true); // Set flag for manual refresh
+    fetchEmployees();
   };
 
   return (
@@ -207,7 +268,8 @@ const App = () => {
             label="Refresh"
             icon="pi pi-refresh"
             className="p-button-warning p-button-outlined"
-            onClick={fetchEmployees}
+            onClick={handleRefresh} // Use separate handler
+            disabled={loading}
           />
           <Button
             label="Download"
@@ -231,6 +293,8 @@ const App = () => {
           selectionMode="multiple"
           selection={selectedEmployees}
           onSelectionChange={(e) => setSelectedEmployees(e.value)}
+          onRowClick={handleRowClick}
+          rowClassName={(data) => (data === selectedRow ? "highlighted-row" : "")}
           paginator
           rows={10}
           rowsPerPageOptions={[5, 10, 25]}
@@ -239,7 +303,7 @@ const App = () => {
           removableSort
           scrollable
           scrollHeight="1000px"
-          loading={filteredEmployees.length === 0}
+          loading={loading || filteredEmployees.length === 0}
           dataKey="emp_id"
         >
           <Column selectionMode="multiple" exportable={false} />
@@ -363,7 +427,7 @@ const App = () => {
           <Column
             field="last_updated"
             header="Last Updated"
-            body={(rowData) => rowData.last_updated || "N/A"}
+            body={(rowData) => formatLastUpdated(rowData.last_updated)}
             sortable
           />
         </DataTable>
@@ -384,260 +448,169 @@ const App = () => {
           employee={
             isEditMode ? parseEmployeeDates(selectedEmployees[0]) : null
           }
-          onSave={fetchEmployees}
+          onSave={onSave}
           isEditMode={isEditMode}
           toast={toast}
         />
 
         <Dialog
-          header={`Employee Details - ${
-            viewedEmployee
-              ? `${viewedEmployee.first_name} ${viewedEmployee.last_name}`
-              : ""
-          }`}
+          header={`Employee Details - ${viewedEmployee ? `${viewedEmployee.first_name} ${viewedEmployee.last_name}` : ""}`}
           visible={viewDialogVisible}
           onHide={() => setViewDialogVisible(false)}
           className="employee-dialog"
           breakpoints={{ "960px": "75vw", "641px": "90vw" }}
           modal
+          style={{ maxHeight: "80vh", overflowY: "auto" }}
         >
           {viewedEmployee && (
-            <div className="grid">
-              <div className="col-12 md:col-6">
-                <Card title="Personal Information" className="mb-3">
-                  <div className="grid">
-                    <div className="col-6 ">
-                      <p>
-                        <strong>Employee ID:</strong>{" "}
-                        {viewedEmployee.emp_id || "N/A"}
-                      </p>
-                      <p>
-                        <strong>First Name:</strong>{" "}
-                        {viewedEmployee.first_name || "N/A"}
-                      </p>
-                      <p>
-                        <strong>Middle Name:</strong>{" "}
-                        {viewedEmployee.middle_name || "N/A"}
-                      </p>
-                      <p>
-                        <strong>Last Name:</strong>{" "}
-                        {viewedEmployee.last_name || "N/A"}
-                      </p>
-                      <p>
-                        <strong>Suffix:</strong>{" "}
-                        {viewedEmployee.suffix || "N/A"}
-                      </p>
-                      <p>
-                        <strong>Sex:</strong> {viewedEmployee.sex || "N/A"}
-                      </p>
-                      <p>
-                        <strong>Birthday:</strong>{" "}
-                        {formatDate(viewedEmployee.birthday)}
-                      </p>
+            <div className="p-4">
+              <div className="grid">
+                {/* Personal Information */}
+                <div className="col-12">
+                  <Card title="Personal Information" className="mb-4">
+                    <div className="grid grid-nogutter">
+                      {[
+                        { label: "Employee ID", value: viewedEmployee.emp_id },
+                        { label: "First Name", value: viewedEmployee.first_name },
+                        { label: "Middle Name", value: viewedEmployee.middle_name },
+                        { label: "Last Name", value: viewedEmployee.last_name },
+                        { label: "Suffix", value: viewedEmployee.suffix },
+                        { label: "Sex", value: viewedEmployee.sex },
+                        { label: "Birthday", value: formatDate(viewedEmployee.birthday) },
+                        { label: "Email", value: viewedEmployee.email },
+                        { label: "Phone", value: viewedEmployee.phone },
+                        { label: "Address", value: viewedEmployee.address },
+                        { label: "City", value: viewedEmployee.city },
+                        { label: "Province", value: viewedEmployee.province },
+                        { label: "Zip", value: viewedEmployee.zip },
+                      ].map((item, index) => (
+                        <div key={index} className="col-12 md:col-6 lg:col-4 p-2">
+                          <div className="flex flex-col">
+                            <span className="font-bold text-base text-gray-700">{item.label}:</span>
+                            <span className="text-base text-gray-900">{item.value || "N/A"}</span>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                    <div className="col-6">
-                      <p>
-                        <strong>Email:</strong> {viewedEmployee.email || "N/A"}
-                      </p>
-                      <p>
-                        <strong>Phone:</strong> {viewedEmployee.phone || "N/A"}
-                      </p>
-                      <p>
-                        <strong>Address:</strong>{" "}
-                        {viewedEmployee.address || "N/A"}
-                      </p>
-                      <p>
-                        <strong>City:</strong> {viewedEmployee.city || "N/A"}
-                      </p>
-                      <p>
-                        <strong>Province:</strong>{" "}
-                        {viewedEmployee.province || "N/A"}
-                      </p>
-                      <p>
-                        <strong>Zip:</strong> {viewedEmployee.zip || "N/A"}
-                      </p>
-                    </div>
-                  </div>
-                </Card>
+                  </Card>
+                </div>
 
-                <Card title="Employment Details" className="mb-3">
-                  <div className="grid">
-                    <div className="col-6">
-                      <p>
-                        <strong>Location:</strong>{" "}
-                        {viewedEmployee.location || "N/A"}
-                      </p>
-                      <p>
-                        <strong>Department:</strong>{" "}
-                        {viewedEmployee.department || "N/A"}
-                      </p>
-                      <p>
-                        <strong>Project:</strong>{" "}
-                        {viewedEmployee.project || "N/A"}
-                      </p>
-                      <p>
-                        <strong>Team:</strong> {viewedEmployee.team || "N/A"}
-                      </p>
-                      <p>
-                        <strong>Position:</strong>{" "}
-                        {viewedEmployee.position || "N/A"}
-                      </p>
+                {/* Employment Details */}
+                <div className="col-12">
+                  <Card title="Employment Details" className="mb-4">
+                    <div className="grid grid-nogutter">
+                      {[
+                        { label: "Location", value: viewedEmployee.location },
+                        { label: "Department", value: viewedEmployee.department },
+                        { label: "Project", value: viewedEmployee.project },
+                        { label: "Team", value: viewedEmployee.team },
+                        { label: "Position", value: viewedEmployee.position },
+                        { label: "Employment Type", value: viewedEmployee.employment_type },
+                        { label: "User Profile", value: viewedEmployee.user_profile },
+                        { label: "Manager", value: viewedEmployee.manager },
+                        { label: "Vendor", value: viewedEmployee.vendor },
+                        { label: "Active", value: viewedEmployee.active ? "Yes" : "No", checkmark: true },
+                      ].map((item, index) => (
+                        <div key={index} className="col-12 md:col-6 lg:col-4 p-2">
+                          <div className="flex flex-col">
+                            <span className="font-bold text-base text-gray-700">{item.label}:</span>
+                            <span className="text-base text-gray-900">
+                              {item.checkmark
+                                ? item.value === "Yes"
+                                  ? "✓"
+                                  : item.value || "N/A"
+                                : item.value || "N/A"}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                    <div className="col-6">
-                      <p>
-                        <strong>Employment Type:</strong>{" "}
-                        {viewedEmployee.employment_type || "N/A"}
-                      </p>
-                      <p>
-                        <strong>User Profile:</strong>{" "}
-                        {viewedEmployee.user_profile || "N/A"}
-                      </p>
-                      <p>
-                        <strong>Manager:</strong>{" "}
-                        {viewedEmployee.manager || "N/A"}
-                      </p>
-                      <p>
-                        <strong>Vendor:</strong>{" "}
-                        {viewedEmployee.vendor || "N/A"}
-                      </p>
-                      <p>
-                        <strong>Active:</strong>{" "}
-                        {viewedEmployee.active ? "Yes" : "No"}
-                      </p>
-                    </div>
-                  </div>
-                </Card>
-              </div>
+                  </Card>
+                </div>
 
-              <div className="col-12 md:col-6">
-                <Card title="Dates" className="mb-3">
-                  <div className="grid">
-                    <div className="col-6">
-                      <p>
-                        <strong>Date Hired:</strong>{" "}
-                        {formatDate(viewedEmployee.date_hired)}
-                      </p>
-                      <p>
-                        <strong>Date Regularized:</strong>{" "}
-                        {formatDate(viewedEmployee.date_regularized)}
-                      </p>
-                      <p>
-                        <strong>Date Separated:</strong>{" "}
-                        {formatDate(viewedEmployee.date_separated)}
-                      </p>
+                {/* Dates */}
+                <div className="col-12">
+                  <Card title="Dates" className="mb-4">
+                    <div className="grid grid-nogutter">
+                      {[
+                        { label: "Date Hired", value: formatDate(viewedEmployee.date_hired) },
+                        { label: "Date Regularized", value: formatDate(viewedEmployee.date_regularized) },
+                        { label: "Date Separated", value: formatDate(viewedEmployee.date_separated) },
+                        { label: "Contract Start", value: formatDate(viewedEmployee.contract_start) },
+                        { label: "Contract End", value: formatDate(viewedEmployee.contract_end) },
+                        { label: "Last Updated", value: formatLastUpdated(viewedEmployee.last_updated) },
+                        { label: "Minimum Wage Earner", value: viewedEmployee.minimum_wage_earner ? "Yes" : "No", checkmark: true },
+                        { label: "Kasambahay", value: viewedEmployee.kasambahay ? "Yes" : "No", checkmark: true },
+                      ].map((item, index) => (
+                        <div key={index} className="col-12 md:col-6 lg:col-4 p-2">
+                          <div className="flex flex-col">
+                            <span className="font-bold text-base text-gray-700">{item.label}:</span>
+                            <span className="text-base text-gray-900">
+                              {item.checkmark
+                                ? item.value === "Yes"
+                                  ? "✓"
+                                  : item.value || "N/A"
+                                : item.value || "N/A"}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                    <div className="col-6">
-                      <p>
-                        <strong>Contract Start:</strong>{" "}
-                        {formatDate(viewedEmployee.contract_start)}
-                      </p>
-                      <p>
-                        <strong>Contract End:</strong>{" "}
-                        {formatDate(viewedEmployee.contract_end)}
-                      </p>
-                      <p>
-                        <strong>Last Updated:</strong>{" "}
-                        {viewedEmployee.last_updated || "N/A"}
-                      </p>
-                    </div>
-                  </div>
-                </Card>
+                  </Card>
+                </div>
 
-                <Card title="Compensation" className="mb-3">
-                  <div className="grid">
-                    <div className="col-6">
-                      <p>
-                        <strong>Monthly Rate:</strong>{" "}
-                        {viewedEmployee.monthly_rate || "N/A"}
-                      </p>
-                      <p>
-                        <strong>Daily Rate:</strong>{" "}
-                        {viewedEmployee.daily_rate || "N/A"}
-                      </p>
-                      <p>
-                        <strong>Hourly Rate:</strong>{" "}
-                        {viewedEmployee.hourly_rate || "N/A"}
-                      </p>
-                      <p>
-                        <strong>Days/Month:</strong>{" "}
-                        {viewedEmployee.days_per_month || "N/A"}
-                      </p>
-                      <p>
-                        <strong>Hours/Day:</strong>{" "}
-                        {viewedEmployee.hours_per_day || "N/A"}
-                      </p>
+                {/* Compensation */}
+                <div className="col-12">
+                  <Card title="Compensation" className="mb-4">
+                    <div className="grid grid-nogutter">
+                      {[
+                        { label: "Monthly Rate", value: viewedEmployee.monthly_rate },
+                        { label: "Daily Rate", value: viewedEmployee.daily_rate },
+                        { label: "Hourly Rate", value: viewedEmployee.hourly_rate },
+                        { label: "Days/Month", value: viewedEmployee.days_per_month },
+                        { label: "Hours/Day", value: viewedEmployee.hours_per_day },
+                        { label: "Cost of Living", value: viewedEmployee.cost_of_living },
+                        { label: "Rep Allowance", value: viewedEmployee.representation_allowance },
+                        { label: "Housing Allowance", value: viewedEmployee.housing_allowance },
+                        { label: "Trans Allowance", value: viewedEmployee.transportation_allowance },
+                      ].map((item, index) => (
+                        <div key={index} className="col-12 md:col-6 lg:col-4 p-2">
+                          <div className="flex flex-col">
+                            <span className="font-bold text-base text-gray-700">{item.label}:</span>
+                            <span className="text-base text-gray-900">{item.value || "N/A"}</span>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                    <div className="col-6">
-                      <p>
-                        <strong>Cost of Living:</strong>{" "}
-                        {viewedEmployee.cost_of_living || "N/A"}
-                      </p>
-                      <p>
-                        <strong>Rep Allowance:</strong>{" "}
-                        {viewedEmployee.representation_allowance || "N/A"}
-                      </p>
-                      <p>
-                        <strong>Housing Allowance:</strong>{" "}
-                        {viewedEmployee.housing_allowance || "N/A"}
-                      </p>
-                      <p>
-                        <strong>Trans Allowance:</strong>{" "}
-                        {viewedEmployee.transportation_allowance || "N/A"}
-                      </p>
-                    </div>
-                  </div>
-                </Card>
-              </div>
+                  </Card>
+                </div>
 
-              <div className="col-12">
-                <Card title="Government IDs & Bank Info">
-                  <div className="grid">
-                    <div className="col-6">
-                      <p>
-                        <strong>Tax ID:</strong>{" "}
-                        {viewedEmployee.tax_id || "N/A"}
-                      </p>
-                      <p>
-                        <strong>SSS Number:</strong>{" "}
-                        {viewedEmployee.sss_number || "N/A"}
-                      </p>
-                      <p>
-                        <strong>PhilHealth ID:</strong>{" "}
-                        {viewedEmployee.philhealth_id || "N/A"}
-                      </p>
-                      <p>
-                        <strong>HDMF ID:</strong>{" "}
-                        {viewedEmployee.hdmf_id || "N/A"}
-                      </p>
-                      <p>
-                        <strong>HDMF Account:</strong>{" "}
-                        {viewedEmployee.hdmf_account || "N/A"}
-                      </p>
+                {/* Government IDs & Bank Info */}
+                <div className="col-12">
+                  <Card title="Government IDs & Bank Info">
+                    <div className="grid grid-nogutter">
+                      {[
+                        { label: "Tax ID", value: viewedEmployee.tax_id },
+                        { label: "SSS Number", value: viewedEmployee.sss_number },
+                        { label: "PhilHealth ID", value: viewedEmployee.philhealth_id },
+                        { label: "HDMF ID", value: viewedEmployee.hdmf_id },
+                        { label: "HDMF Account", value: viewedEmployee.hdmf_account },
+                        { label: "Bank Name", value: viewedEmployee.bank_name },
+                        { label: "Bank Account", value: viewedEmployee.bank_account },
+                        { label: "CTC ID", value: viewedEmployee.ctc_id },
+                        { label: "CTC Place", value: viewedEmployee.ctc_place },
+                        { label: "CTC Date", value: formatDate(viewedEmployee.ctc_date) },
+                      ].map((item, index) => (
+                        <div key={index} className="col-12 md:col-6 lg:col-4 p-2">
+                          <div className="flex flex-col">
+                            <span className="font-bold text-base text-gray-700">{item.label}:</span>
+                            <span className="text-base text-gray-900">{item.value || "N/A"}</span>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                    <div className="col-6">
-                      <p>
-                        <strong>Bank Name:</strong>{" "}
-                        {viewedEmployee.bank_name || "N/A"}
-                      </p>
-                      <p>
-                        <strong>Bank Account:</strong>{" "}
-                        {viewedEmployee.bank_account || "N/A"}
-                      </p>
-                      <p>
-                        <strong>CTC ID:</strong>{" "}
-                        {viewedEmployee.ctc_id || "N/A"}
-                      </p>
-                      <p>
-                        <strong>CTC Place:</strong>{" "}
-                        {viewedEmployee.ctc_place || "N/A"}
-                      </p>
-                      <p>
-                        <strong>CTC Date:</strong>{" "}
-                        {formatDate(viewedEmployee.ctc_date)}
-                      </p>
-                    </div>
-                  </div>
-                </Card>
+                  </Card>
+                </div>
               </div>
             </div>
           )}
