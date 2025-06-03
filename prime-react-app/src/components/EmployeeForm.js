@@ -164,6 +164,37 @@ const EmployeeForm = ({
     )
       newErrors.monthly_rate = "Monthly Rate must be a positive number.";
     if (
+      formData.base_monthly_pay &&
+      (isNaN(formData.base_monthly_pay) || formData.base_monthly_pay < 0)
+    )
+      newErrors.base_monthly_pay =
+        "Base Monthly Pay must be a positive number or zero.";
+
+
+    if (
+      formData.days_per_month &&
+      (isNaN(formData.days_per_month) || formData.days_per_month < 0)
+    )
+      newErrors.days_per_month =
+        "Days per Month must be a positive number or zero.";
+    if (
+      formData.hours_per_day &&
+      (isNaN(formData.hours_per_day) || formData.hours_per_day < 0)
+    )
+      newErrors.hours_per_day =
+        "Hours per Day must be a positive number or zero.";
+    if (
+      formData.daily_rate &&
+      (isNaN(formData.daily_rate) || formData.daily_rate < 0)
+    )
+      newErrors.daily_rate = "Daily Rate must be a positive number or zero.";
+    if (
+      formData.hourly_rate &&
+      (isNaN(formData.hourly_rate) || formData.hourly_rate < 0)
+    )
+      newErrors.hourly_rate = "Hourly Rate must be a positive number or zero.";
+
+    if (
       formData.cost_of_living &&
       (isNaN(formData.cost_of_living) || formData.cost_of_living < 0)
     )
@@ -787,12 +818,15 @@ const EmployeeForm = ({
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  base_monthly_pay: parseFloat(e.target.value) || 0,
+                  base_monthly_pay: e.target.value === "" ? "" : parseFloat(e.target.value) || 0,
                 })
               }
-              className="w-full"
+              className={errors.base_monthly_pay ? "p-invalid w-full" : "w-full"}
               type="number"
             />
+            {errors.base_monthly_pay && (
+              <small className="p-error">{errors.base_monthly_pay}</small>
+            )}
           </div>
           <div className="col-12 md:col-6">
             <label className="block mb-1">Days per Month</label>
@@ -801,12 +835,15 @@ const EmployeeForm = ({
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  days_per_month: parseFloat(e.target.value) || 0,
+                  days_per_month: e.target.value === "" ? "" : parseFloat(e.target.value) || 0,
                 })
               }
-              className="w-full"
+              className={errors.days_per_month ? "p-invalid w-full" : "w-full"}
               type="number"
             />
+            {errors.days_per_month && (
+              <small className="p-error">{errors.days_per_month}</small>
+            )}
           </div>
           <div className="col-12 md:col-6">
             <label className="block mb-1">Hours per Day</label>
@@ -815,12 +852,15 @@ const EmployeeForm = ({
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  hours_per_day: parseFloat(e.target.value) || 0,
+                  hours_per_day: e.target.value === "" ? "" : parseFloat(e.target.value) || 0,
                 })
               }
-              className="w-full"
+              className={errors.hours_per_day ? "p-invalid w-full" : "w-full"}
               type="number"
             />
+            {errors.hours_per_day && (
+              <small className="p-error">{errors.hours_per_day}</small>
+            )}
           </div>
           <div className="col-12 md:col-6">
             <label className="block mb-1">Daily Rate</label>
@@ -829,12 +869,13 @@ const EmployeeForm = ({
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  daily_rate: parseFloat(e.target.value) || 0,
+                  daily_rate: e.target.value === "" ? "" : parseFloat(e.target.value) || 0,
                 })
               }
-              className="w-full"
+              className={errors.daily_rate ? "p-invalid w-full" : "w-full"}
               type="number"
             />
+            {errors.daily_rate && <small className="p-error">{errors.daily_rate}</small>}
           </div>
           <div className="col-12 md:col-6">
             <label className="block mb-1">Hourly Rate</label>
@@ -843,12 +884,13 @@ const EmployeeForm = ({
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  hourly_rate: parseFloat(e.target.value) || 0,
+                  hourly_rate: e.target.value === "" ? "" : parseFloat(e.target.value) || 0,
                 })
               }
-              className="w-full"
+              className={errors.hourly_rate ? "p-invalid w-full" : "w-full"}
               type="number"
             />
+            {errors.hourly_rate && <small className="p-error">{errors.hourly_rate}</small>}
           </div>
           <div className="col-12 md:col-6">
             <label className="block mb-1">Cost of Living Allowance</label>
