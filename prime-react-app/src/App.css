@@ -1,8 +1,6 @@
 /* =================== */
 /* 1. Global Layout Styles */
 /* =================== */
-
-/* Main container: centers the entire app content */
 .app-container {
   display: flex;
   justify-content: center;
@@ -10,22 +8,19 @@
   background-color: #fff;
 }
 
-/* Wrapper around the table with border, padding, and max-width */
 .table-wrapper {
   width: 100%;
   max-width: 115rem;
   margin: 0 0.25rem;
-  background-color: #ffffff;
+  background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 0.5rem;
 }
 
 /* =================== */
-/* 2. Title and Buttons */
+/* 2. Title, Buttons, and Search */
 /* =================== */
-
-/* Centered page title */
 .app-title {
   text-align: center;
   font-size: 1.5rem;
@@ -34,7 +29,6 @@
   padding: 0.5rem;
 }
 
-/* Button group (Add/Edit/Delete/etc.) - centered */
 .button-group {
   display: flex;
   gap: 0.5rem;
@@ -43,7 +37,6 @@
   padding: 0 0.25rem;
 }
 
-/* Search bar wrapper and input styling */
 .search-container {
   display: flex;
   justify-content: center;
@@ -59,129 +52,168 @@
   border-radius: 0.25rem;
 }
 
+.justify-end {
+  justify-content: flex-end;
+}
+
+.p-button:active,
+.p-button:focus:active {
+  filter: brightness(0.85); /* Darken buttons on click */
+}
+
 /* =================== */
 /* 3. DataTable Styling */
 /* =================== */
-
-/* Base styling for PrimeReact DataTable */
 .custom-datatable {
   border: 1px solid #ccc;
-  background-color: #ffffff;
+  background-color: #fff;
 }
 
-/* Center all text inside the DataTable headers and rows */
-.custom-datatable .p-datatable-thead > tr > th,
+/* Ensure header row displays as a table row */
+.custom-datatable .p-datatable-thead > tr {
+  display: table-row !important; /* Fixes vertical stacking of headers */
+}
+
+/* Base styling for DataTable headers */
+.custom-datatable .p-datatable-thead > tr > th {
+  display: table-cell !important; /* Ensures headers lay out in a row */
+  text-align: center !important;
+  vertical-align: middle !important;
+  padding: 0.5rem !important;
+  white-space: nowrap !important; /* Prevents header text from wrapping */
+  overflow: hidden !important;
+  text-overflow: ellipsis !important; /* Adds ellipsis for overflow text */
+  min-width: 120px !important; /* Ensures enough width for headers */
+  max-width: none !important; /* Removes any max-width constraints */
+  border: 1px solid #ddd; /* Consistent border with body cells */
+  background-color: #fff;
+}
+
+/* Base styling for DataTable body cells */
 .custom-datatable .p-datatable-tbody > tr > td {
+  display: table-cell !important; /* Ensures proper table cell alignment */
   text-align: center !important;
   vertical-align: middle !important;
   border: 1px solid #ddd;
-  background-color: #ffffff;
+  background-color: #fff;
   padding: 0.5rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-width: 100px;
+  white-space: normal !important; /* Allows text to wrap in body cells */
+  overflow: visible !important; /* Ensures wrapped text is fully visible */
+  text-overflow: clip !important; /* Removes ellipsis for wrapped text */
+  min-width: 150px !important; /* Ensures enough width for body content */
 }
 
-/* Increase width for known wide columns like city and province */
-.custom-datatable .p-datatable-thead > tr > th:nth-child(8),
-.custom-datatable .p-datatable-tbody > tr > td:nth-child(8),
-.custom-datatable .p-datatable-thead > tr > th:nth-child(9),
-.custom-datatable .p-datatable-tbody > tr > td:nth-child(9) {
-  min-width: 150px;
+/* Center header titles within their cells */
+.custom-datatable .p-datatable-thead th .p-column-title {
+  text-align: center !important;
+  display: inline-block !important;
+  width: 100% !important; /* Ensures title takes full width for centering */
 }
 
-/* Fix selection column width */
+/* Sortable columns */
+.custom-datatable .p-datatable-thead th.p-sortable-column {
+  display: table-cell !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  padding: 0.5rem !important;
+}
+
+/* Hide sort icons */
+.p-sortable-column-icon {
+  display: none !important;
+}
+
+/* Selection column width */
 .custom-datatable .p-datatable-thead > tr > th.p-selection-column,
 .custom-datatable .p-datatable-tbody > tr > td.p-selection-column {
   width: 3rem !important;
   min-width: 3rem !important;
 }
 
-/* Hide sort icons in PrimeReact DataTable headers */
-.p-sortable-column-icon {
-  display: none !important;
+/* Wider columns (e.g., City, Province) */
+.custom-datatable .p-datatable-thead > tr > th:nth-child(8),
+.custom-datatable .p-datatable-tbody > tr > td:nth-child(8),
+.custom-datatable .p-datatable-thead > tr > th:nth-child(9),
+.custom-datatable .p-datatable-tbody > tr > td:nth-child(9) {
+  min-width: 150px !important; /* Extra width for wider columns */
+}
+
+/* Address column (6th) with text wrapping */
+.custom-datatable .p-datatable-tbody > tr > td:nth-child(6) {
+  max-width: 200px !important; /* Limits width to trigger wrapping */
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important; /* Modern alternative to word-wrap */
+  white-space: normal !important;
+}
+
+/* Ensure Address column header does not wrap */
+.custom-datatable .p-datatable-thead > tr > th:nth-child(6) {
+  white-space: nowrap !important; /* Overrides wrapping for Address header */
 }
 
 /* =================== */
 /* 4. Dialog and Card Styling */
 /* =================== */
-
-/* Style for employee view dialog */
 .employee-dialog {
   width: 70vw;
 }
 
-/* Center text inside employee details cards */
-.employee-dialog .p-card-content p {
+.employee-dialog .p-dialog-title,
+.employee-form-dialog .p-dialog-title,
+.p-card-title {
+  width: 100%;
   text-align: center;
 }
 
-/* Optional spacing between card fields */
 .employee-dialog .p-card-content p {
-  margin: 0.5rem 0;
+  text-align: center;
+  margin: 0.5rem 0; /* Spacing between card fields */
+}
+
+.employee-form-dialog .p-dialog-content {
+  padding: 1rem;
 }
 
 /* =================== */
 /* 5. Additional UI Elements */
 /* =================== */
-
-/* Change log at the bottom of the table */
 .change-log {
   margin-top: 1rem;
-  padding: 1rem;
+  padding: 1rem 0.25rem;
   border: 1px solid #ccc;
   border-radius: 0.25rem;
   text-align: center;
-  padding-left: 0.25rem;
-  padding-right: 0.25rem;
-  background-color: #ffffff;
+  background-color: #fff;
 }
 
 /* =================== */
 /* 6. Responsive Design */
 /* =================== */
-
-@media (max-width: 1400px) {
+@media (max-width: 1400px), (max-width: 1200px), (max-width: 1024px) {
   .table-wrapper {
     max-width: 100%;
   }
   .custom-datatable {
     font-size: 0.9rem;
+    overflow-x: auto; /* Enables horizontal scrolling on smaller screens */
   }
-  .custom-datatable {
-    overflow-x: auto;
-  }
+}
+
+@media (max-width: 1400px) {
   .custom-datatable .p-datatable-thead > tr > th,
   .custom-datatable .p-datatable-tbody > tr > td {
     min-width: 80px;
   }
 }
+
 @media (max-width: 1200px) {
-  .table-wrapper {
-    max-width: 100%;
-  }
-  .custom-datatable {
-    font-size: 0.9rem;
-  }
-  .custom-datatable {
-    overflow-x: auto;
-  }
   .custom-datatable .p-datatable-thead > tr > th,
   .custom-datatable .p-datatable-tbody > tr > td {
     min-width: 70px;
   }
 }
+
 @media (max-width: 1024px) {
-  .table-wrapper {
-    max-width: 100%;
-  }
-  .custom-datatable {
-    font-size: 0.9rem;
-  }
-  .custom-datatable {
-    overflow-x: auto;
-  }
   .custom-datatable .p-datatable-thead > tr > th,
   .custom-datatable .p-datatable-tbody > tr > td {
     min-width: 60px;
@@ -232,57 +264,6 @@
     font-size: 0.75rem;
   }
 }
-@media (max-width: 480px) {
-  .app-title {
-    font-size: 1rem;
-  }
-  .button-group {
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-  .search-input {
-    max-width: 12rem;
-  }
-  .custom-datatable .p-datatable-thead > tr > th,
-  .custom-datatable .p-datatable-tbody > tr > td {
-    min-width: 40px;
-    font-size: 0.7rem;
-  }
-}
-
-/* view card title */
-.employee-dialog .p-dialog-title {
-  width: 100%;
-  text-align: center;
-}
-
-/* view card title header */
-.p-card-title {
-  text-align: center;
-  width: 100%;
-}
-
-/* add buttons */
-.justify-end {
-  justify-content: flex-end;
-}
-
-/* add edit employee  */
-.employee-form-dialog .p-dialog-title {
-  width: 100%;
-  text-align: center;
-}
-
-/* Darken PrimeReact buttons on click (active state) */
-.p-button:active,
-.p-button:focus:active {
-  filter: brightness(0.85);
-}
-
-/* Responsive Employee Form Dialog */
-.employee-form-dialog .p-dialog-content {
-  padding: 1rem;
-}
 
 @media (max-width: 600px) {
   .employee-form-dialog .p-dialog-content {
@@ -300,5 +281,23 @@
   .employee-form-dialog .button-bar {
     flex-direction: column;
     gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-title {
+    font-size: 1rem;
+  }
+  .button-group {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .search-input {
+    max-width: 12rem;
+  }
+  .custom-datatable .p-datatable-thead > tr > th,
+  .custom-datatable .p-datatable-tbody > tr > td {
+    min-width: 40px;
+    font-size: 0.7rem;
   }
 }
